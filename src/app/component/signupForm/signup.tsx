@@ -3,6 +3,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
 import CommonInput from "@/app/component/common/CommonInput";
+import { useAuth } from "@/app/context/AuthContext";
 
 interface SignUpFormInputs {
   firstName: string;
@@ -19,34 +20,19 @@ const SignUp: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpFormInputs>();
-  const {navigate}= useCustomNavigate()
-  const onSubmit: SubmitHandler<SignUpFormInputs> = async(formValue) => {
-    let payload={
-        firstName: formValue?.firstName,
-        lastName: formValue?.lastName,
-        email: formValue?.email,
-        password: formValue?.password,
-        action: "signup"
-    }
-    const res = await fetch('/api/auth/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-  
-      const data = await res.json();
-      if (res.ok) {
-        alert('User created successfully');
-      } else {
-       console.error("error in from Be", res)
-      } 
+  const { navigate } = useCustomNavigate();
+  const { signup } = useAuth();
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async (formValue) => {
+    await signup(
+      formValue?.firstName,
+      formValue?.lastName,
+      formValue?.email,
+      formValue?.password
+    );
   };
 
   return (
     <div className="min-h-screen bg-[#0A2733] flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Main content */}
       <div className="w-full max-w-md px-6 z-10">
         <h1 className="text-white text-4xl font-medium text-center mb-8">
           Sign up
@@ -66,7 +52,7 @@ const SignUp: React.FC = () => {
               />
             </div>
             <div>
-            <CommonInput
+              <CommonInput
                 name="lastName"
                 type="text"
                 placeholder="Last Name"
@@ -79,47 +65,47 @@ const SignUp: React.FC = () => {
           </div>
 
           <div>
-          <CommonInput
-            name="email"
-            type="email"
-            placeholder="Email"
-            label="Email"
-            register={register}
-            required="Email is required"
-            pattern={{
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Invalid email address",
-            }}
-            error={errors.email}
-          />
+            <CommonInput
+              name="email"
+              type="email"
+              placeholder="Email"
+              label="Email"
+              register={register}
+              required="Email is required"
+              pattern={{
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Invalid email address",
+              }}
+              error={errors.email}
+            />
           </div>
 
           <div>
-          <CommonInput
-            name="password"
-            type="password"
-            placeholder="Password"
-            label="Password"
-            register={register}
-            required="Password is required"
-            error={errors.password}
-          />
+            <CommonInput
+              name="password"
+              type="password"
+              placeholder="Password"
+              label="Password"
+              register={register}
+              required="Password is required"
+              error={errors.password}
+            />
           </div>
 
           <div>
-          <CommonInput
-            name="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-            label="Confirm Password"
-            register={register}
-            required="Password is required"
-            error={errors.confirmPassword}
-          />
+            <CommonInput
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              label="Confirm Password"
+              register={register}
+              required="Password is required"
+              error={errors.confirmPassword}
+            />
           </div>
 
           <div className="flex items-center">
-          <input
+            <input
               type="checkbox"
               id="terms"
               {...register("terms")}
@@ -139,7 +125,10 @@ const SignUp: React.FC = () => {
 
           <p className="text-center text-gray-400 text-sm">
             Already have an account?{" "}
-            <span className="text-[#40F99B] hover:underline cursor-pointer" onClick={()=>navigate('/login')}>
+            <span
+              className="text-[#40F99B] hover:underline cursor-pointer"
+              onClick={() => navigate("/login")}
+            >
               Sign in
             </span>
           </p>

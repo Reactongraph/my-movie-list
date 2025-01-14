@@ -1,35 +1,38 @@
-'use client'
+"use client";
 
-import { useState, useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { Header } from "@/app/component/header/header";
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 export default function CreateMovie() {
-  const [image, setImage] = useState<string | null>(null)
-  
+  const [image, setImage] = useState<string | null>(null);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0]
+    const file = acceptedFiles[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setImage(imageUrl)
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
     }
-  }, [])
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.webp']
+      "image/*": [".jpeg", ".jpg", ".png", ".webp"],
     },
-    multiple: false
-  })
+    multiple: false,
+  });
 
   return (
     <div className="min-h-screen bg-[#0A2733] flex flex-col items-center pt-16 relative overflow-hidden">
       {/* Main content */}
-      <div className="w-full max-w-4xl px-6 z-10">
+      <Header />
+
+      <div className="w-full max-w-4xl px-6 py-10 z-10">
         <h1 className="text-white text-3xl font-medium mb-8">
           Create a new movie
         </h1>
-        
+
         <div className="grid md:grid-cols-2 gap-8">
           {/* Image upload area */}
           <div
@@ -39,7 +42,7 @@ export default function CreateMovie() {
               flex items-center justify-center
               cursor-pointer
               transition-colors
-              ${isDragActive ? 'border-[#40F99B]' : 'border-gray-400'}
+              ${isDragActive ? "border-[#40F99B]" : "border-gray-400"}
               hover:border-[#40F99B]
             `}
           >
@@ -51,9 +54,7 @@ export default function CreateMovie() {
                 className="w-full h-full object-cover rounded-lg"
               />
             ) : (
-              <p className="text-gray-400 text-center">
-                Drop an image here
-              </p>
+              <p className="text-gray-400 text-center">Drop an image here</p>
             )}
           </div>
 
@@ -66,7 +67,13 @@ export default function CreateMovie() {
                 className="w-full bg-[#1E3A47] bg-opacity-50 rounded px-4 py-3 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#40F99B]"
               />
             </div>
-            
+            <div>
+              <input
+                type="text"
+                placeholder="Video Url"
+                className="w-full bg-[#1E3A47] bg-opacity-50 rounded px-4 py-3 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#40F99B]"
+              />
+            </div>
             <div>
               <input
                 type="text"
@@ -101,6 +108,5 @@ export default function CreateMovie() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

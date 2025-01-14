@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
 import CommonInput from "@/app/component/common/CommonInput";
 
@@ -17,9 +18,9 @@ const SignIn: React.FC = () => {
     formState: { errors },
   } = useForm<SignInFormInputs>();
   const { navigate } = useCustomNavigate();
-
-  const onSubmit: SubmitHandler<SignInFormInputs> = (data) => {
-    console.log("data", data); // Call the function passed from the parent component
+  const { login } = useAuth();
+  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
+    await login(data.email, data.password);
   };
   return (
     <div className="min-h-screen bg-[#0A2733] flex flex-col items-center justify-center">
