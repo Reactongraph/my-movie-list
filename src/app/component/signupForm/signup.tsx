@@ -2,32 +2,25 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
-import CommonInput from "@/app/component/common/CommonInput";
+import CommonInput, { SignInFormInputs } from "@/app/component/common/CommonInput";
 import { useAuth } from "@/app/context/AuthContext";
 
-interface SignUpFormInputs {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  terms: boolean;
-}
+
 
 const SignUp: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpFormInputs>();
+  } = useForm<SignInFormInputs>();
   const { navigate } = useCustomNavigate();
   const { signup } = useAuth();
-  const onSubmit: SubmitHandler<SignUpFormInputs> = async (formValue) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
     await signup(
-      formValue?.firstName,
-      formValue?.lastName,
-      formValue?.email,
-      formValue?.password
+      data?.firstName,
+      data?.lastName,
+      data?.email,
+      data?.password
     );
   };
 

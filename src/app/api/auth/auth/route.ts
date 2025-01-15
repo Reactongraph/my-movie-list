@@ -1,7 +1,6 @@
 
 import connectToDatabase from "@/app/database/db";
 import { loginUser, signUpUser } from "../services/authservices/authService";
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -26,7 +25,10 @@ export async function POST(req: Request) {
         JSON.stringify({ message: "Login successful", token, user }),
         { status: 200 }
       );
-    } else {
+    }else if (action ==='createMovie'){
+
+    }
+     else {
       return new Response(JSON.stringify({ message: "Invalid action" }), {
         status: 400,
       });

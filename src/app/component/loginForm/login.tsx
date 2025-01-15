@@ -3,13 +3,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAuth } from "@/app/context/AuthContext";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
-import CommonInput from "@/app/component/common/CommonInput";
+import CommonInput, { SignInFormInputs } from "@/app/component/common/CommonInput";
 
-interface SignInFormInputs {
-  email: string;
-  password: string;
-  remember: boolean;
-}
 
 const SignIn: React.FC = () => {
   const {
@@ -77,7 +72,7 @@ const SignIn: React.FC = () => {
             Login
           </button>
           <p className="text-center text-gray-400 text-sm">
-            Don't have an account?{" "}
+            {`Don't have an account?`}
             <span
               className="text-[#40F99B] hover:underline cursor-pointer"
               onClick={() => navigate("/signup")}
