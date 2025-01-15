@@ -1,9 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const MONGODB_URI = 'mongodb+srv://sharadmaurya:PeXj.m6Vpah8xW3@cluster1.mvsq0.mongodb.net/moviedata?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.NEXT_APP_DB_URL || '';
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  throw new Error(
+    "Please define the MONGODB_URI environment variable inside .env.local"
+  );
 }
 
 let cached = global.mongoose;
@@ -13,7 +15,6 @@ if (!cached) {
 }
 
 async function connectToDatabase() {
-
   if (cached.conn) {
     return cached.conn;
   }
@@ -23,13 +24,13 @@ async function connectToDatabase() {
       bufferCommands: false,
     };
 
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts)
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
       .then((mongoose) => {
         return mongoose;
       })
       .catch((error) => {
-        console.error('Database connection failed:', error);
+        console.error("Database connection failed:", error);
         throw error;
       });
   }
