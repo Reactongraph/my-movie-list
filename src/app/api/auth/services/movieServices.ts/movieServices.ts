@@ -6,9 +6,9 @@ import { verifyToken } from "@/app/middleware/authMiddleware";
 
 // Initialize S3
 const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
+  accessKeyId: process.env.NEXT_APP_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.NEXT_APP_AWS_SECRET_ACCESS_KEY,
+  region: process.env.NEXT_APP_AWS_REGION,
 });
 
 // ✅ Create Movie API
@@ -34,7 +34,7 @@ export const createMovies = async (req: NextRequest) => {
     // Upload poster to S3
     const fileName = `${uuidv4()}-${poster.name}`;
     const uploadParams = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME!,
+      Bucket: process.env.NEXT_APP_AWS_S3_BUCKET_NAME!,
       Key: fileName,
       Body: buffer,
       ContentType: poster.type,
@@ -150,7 +150,7 @@ export const updateMovieById = async (req: NextRequest) => {
 
       // Upload the poster to S3
       const uploadParams = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME!,
+        Bucket: process.env.NEXT_APP_AWS_S3_BUCKET_NAME!,
         Key: fileName,
         Body: buffer,
         ContentType: poster.type,
