@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
@@ -13,13 +13,18 @@ interface UserProps {
 }
 
 export function Header() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { navigate } = useCustomNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const username = user
-    ? (user as UserProps).firstName + (user as UserProps).lastName
-    : "Guest";
-  const email = user ? (user as UserProps).email : "Guest";
+  const [user, setUser] = useState<UserProps | null>(null);
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("userData");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+  const username = user ? `${user.firstName} ${user.lastName}` : "Guest";
+  const email = user ? user.email : "Guest";
   return (
     <header className="fixed top-0 left-0 right-0 bg-[#0A2733] bg-opacity-95 backdrop-blur-sm z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

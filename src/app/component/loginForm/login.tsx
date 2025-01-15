@@ -3,8 +3,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAuth } from "@/app/context/AuthContext";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
-import CommonInput, { SignInFormInputs } from "@/app/component/common/CommonInput";
-
+import CommonInput, {
+  SignInFormInputs,
+} from "@/app/component/common/CommonInput";
+import { ScreenLoader } from "../common/ScreenLoader";
 
 const SignIn: React.FC = () => {
   const {
@@ -13,12 +15,13 @@ const SignIn: React.FC = () => {
     formState: { errors },
   } = useForm<SignInFormInputs>();
   const { navigate } = useCustomNavigate();
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
     await login(data.email, data.password);
   };
   return (
     <div className="min-h-screen bg-[#0A2733] flex flex-col items-center justify-center">
+      <ScreenLoader isLoading={loading} />
       <div className="w-full max-w-md px-6">
         <h1 className="text-white text-4xl font-medium text-center mb-8">
           Sign in

@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 interface AuthContextType {
   user: object | null;
   token: string | null;
+  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   createMovie: (
     title: string,
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { navigate } = useCustomNavigate();
   const [user, setUser] = useState<object | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Function to handle signup
   const signup = async (
@@ -77,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Function to handle login
   const login = async (email: string, password: string) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/auth/auth", {
         method: "POST",
@@ -90,13 +93,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data.user);
         setToken(data.token);
         sessionStorage.setItem("access_token", data?.token);
+        sessionStorage.setItem("userData", JSON.stringify(data?.user));
         toast.success("Logged in successfully!");
+        setLoading(false);
         navigate("/");
       } else {
         toast.error(data.message);
+        setLoading(false);
       }
     } catch {
       toast.error("Something went wrong. Please try again.");
+      setLoading(false);
     }
   };
   const createMovie = async (
@@ -146,7 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const getMoviesList = async() => {
+  const getMoviesList = async () => {
     try {
       const access_token = sessionStorage.getItem("access_token");
       if (!access_token) {
@@ -195,7 +202,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         toast.error(data.message || "Failed to create movie.");
       }
-    }  catch (error: unknown) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message || "Something went wrong. Please try again.");
       } else {
@@ -244,7 +251,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         toast.error(data.message || "Failed to update movie.");
       }
-    }  catch (error: unknown) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message || "Something went wrong. Please try again.");
       } else {
@@ -275,7 +282,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         toast.error(data.message || "Failed to delete movie.");
       }
-    }  catch (error: unknown) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message || "Something went wrong. Please try again.");
       } else {
@@ -298,6 +305,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         token,
+        loading,
         signup,
         login,
         logout,

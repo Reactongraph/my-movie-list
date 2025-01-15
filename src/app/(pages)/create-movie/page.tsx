@@ -3,6 +3,7 @@
 import { Header } from "@/app/component/header/header";
 import Image from "next/image";
 import { useAuth } from "@/app/context/AuthContext";
+import useCustomAuth from "@/app/hooks/useCustomAuth";
 import { useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
 import { useCustomNavigate } from "@/app/hooks/useCustomNavigate";
@@ -19,6 +20,7 @@ interface MovieProps {
 }
 
 function CreateMovieContent() {
+  useCustomAuth();
   const { createMovie, editMovieById } = useAuth();
   const { getMovieById } = useAuth();
   const { navigate } = useCustomNavigate();
@@ -81,7 +83,6 @@ function CreateMovieContent() {
     } else {
       await createMovie(title, publishingYear, poster, videoUrl || "");
     }
-    await createMovie(title, publishingYear, poster, videoUrl || "");
   };
   const handleCancel = () => {
     navigate("/");
@@ -115,6 +116,9 @@ function CreateMovieContent() {
                 src={preview}
                 alt="Movie preview"
                 className="w-full h-full object-cover rounded-lg"
+                width={0}
+                height={0}
+                style={{ width: "100%", height: "100%" }}
               />
             ) : (
               <p className="text-gray-400 text-center">Drop an image here</p>

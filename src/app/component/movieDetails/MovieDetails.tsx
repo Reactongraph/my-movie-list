@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
+import useCustomAuth from "@/app/hooks/useCustomAuth";
 import { useAuth } from "@/app/context/AuthContext";
 import { useSearchParams } from "next/navigation";
 import { ScreenLoader } from "../common/ScreenLoader";
@@ -47,9 +48,13 @@ function MovieDetailsContent() {
           <div className="space-y-6">
             <div className="rounded-xl overflow-hidden shadow-2xl">
               <Image
-                src={movie?.poster ?? ""}
+                src={movie?.poster ?? "/images/dummy.jpeg"}
                 alt={`${movie?.title} Poster`}
                 className="w-full h-auto"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
           </div>
@@ -130,6 +135,7 @@ function MovieDetailsContent() {
 }
 
 export default function MovieDetails() {
+  useCustomAuth()
   return (
     <Suspense fallback={<ScreenLoader />}>
       <MovieDetailsContent />
